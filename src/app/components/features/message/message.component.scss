@@ -1,0 +1,41 @@
+:host {
+    display: block;
+  }
+  
+  .group {
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+  }
+  
+  // Smooth animations for action buttons
+  button {
+    transition: all 0.2s ease;
+    
+    &:hover svg {
+      transform: scale(1.1);
+    }
+    
+    &:active svg {
+      transform: scale(0.95);
+    }
+  }
+  
+  // Copy feedback animation
+  @keyframes checkmark {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .text-green-500 {
+    animation: checkmark 0.3s ease;
+  }

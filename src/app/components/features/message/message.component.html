@@ -1,0 +1,28 @@
+<div [class.bg-ai-msg]="message.role === 'assistant'" 
+     [class.bg-user-msg]="message.role === 'user'"
+     class="py-6 px-4">
+  <div class="max-w-3xl mx-auto flex gap-6 bg-gray-200 p-3">
+    <div class="flex-shrink-0 ">
+      <div *ngIf="message.role === 'user'" 
+           class="w-8 h-8 rounded-sm bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+        <span class="text-black text-sm font-bold">N</span>
+      </div>
+      <div *ngIf="message.role === 'assistant'"
+           class="w-8 h-8 rounded-sm bg-green-600 flex items-center justify-center">
+        <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+    </div>
+
+
+    <div class="flex-1 space-y-2">
+      <div class="text-black text-base leading-7 whitespace-pre-wrap ">
+        {{ message.content }}
+      </div>
+      <div class="text-black text-base leading-7 whitespace-pre-wrap ">
+        {{ message.timestamp }}
+      </div>
+    </div>
+  </div>
+</div>
