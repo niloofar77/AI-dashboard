@@ -29,4 +29,10 @@ export class ChatComponent implements OnInit {
   async onSendMessage(content: string) {
     await this.aiService.sendMessage(content);
   }
+
+  // async onSendMessage(event: { text: string; file?: File | null }) {
+  //   await this.aiService.sendMessage(event.text.file);
+  // }
+
+
 }

@@ -1,0 +1,9 @@
+<form [formGroup]="fileUploadedForm">
+  <input
+    #fileInput
+    type="file"
+    formControlName="fileUploaded"
+    (change)="onFileChange($event)"
+    class="hidden"
+  />
+</form>
