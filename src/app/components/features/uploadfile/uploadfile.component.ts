@@ -25,20 +25,7 @@ export class UploadfileComponent {
     this.fileInput.nativeElement.click();
   }
 
-  // onFileChange(event: Event): void {
-  //   const input = event.target as HTMLInputElement;
-  //   const file = input.files?.[0];
-  //   console.log("fileeeeeeeeeeeeeeee")
-  //   if (file) {
-  //     this.showFile=!this.showFile;
-  //     this.fileName=file.name
-  //     this.fileUploadedForm.patchValue({ fileUploaded: file });
-  //     this.fileSelected.emit(file);   
-    
-    
-  //   }
-  //   console.log("file",file)
-  // }
+
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -47,7 +34,6 @@ export class UploadfileComponent {
       this.showFile = !this.showFile;
       this.fileName = file.name;
   
-      // این‌جا فقط مقدار FormControl را عوض می‌کنی، نه DOM value
       this.fileUploadedForm.patchValue({ fileUploaded: file });
   
       this.fileSelected.emit(file);

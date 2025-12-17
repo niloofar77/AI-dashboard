@@ -38,7 +38,7 @@ export class InputBoxComponent {
   onFileSelected(file: File) {
     this.attachedFile = file;
     this.fileName=file.name;
-    console.log(file.name,"jjjjjjjjjjjjjjj")
+    // console.log(file.name,"jjjjjjjjjjjjjjj")
     this.showMenu = false;
 
     if (file.type.startsWith('image/')) {
