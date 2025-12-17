@@ -2,8 +2,11 @@
   <input
     #fileInput
     type="file"
-    formControlName="fileUploaded"
     (change)="onFileChange($event)"
     class="hidden"
   />
+
+
 </form>
+
+<!-- <app-filechip *ngIf="fileName" [fileName]="fileName"> </app-filechip> -->
