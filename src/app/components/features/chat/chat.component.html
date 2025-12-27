@@ -1,17 +1,46 @@
-<div class="flex flex-col h-screen bg-chat-bg">
-  <div class="flex-1 overflow-y-auto">
-    <div *ngIf="messages.length === 0" class="flex items-center justify-center h-full">
-      <div class="text-center text-gray-400">
-        <h1 class="text-4xl font-bold mb-4">How can I help you today?</h1>
-     
-      </div>
-    </div>
 
-    <div *ngFor="let message of messages" class="w-full">
-      <app-message [message]="message"></app-message>
+
+<div class="chat-container ">
+  
+  <div *ngIf="savedVoiceFiles.length > 0" class="voice-files-section">
+    
+    <div class="voice-files-header">
+      <h4>فایل‌های صوتی ذخیره شده ({{ savedVoiceFiles.length }})</h4>
+      <button (click)="clearAllVoices()" class="clear-all-btn">
+        پاک کردن همه
+      </button>
+    </div>
+    
+    <div class="voice-files-list">
+      <div *ngFor="let file of savedVoiceFiles; let i = index" class="voice-file-item">
+        
+        <audio [src]="file.url" controls></audio>
+        
+   
+        
+        <div class="voice-file-actions">
+          <button (click)="downloadVoice(file)" class="download-btn">
+            دانلود
+          </button>
+          <button (click)="deleteVoice(i)" class="delete-btn">
+            حذف
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
+  <div class="messages-container">
+    <app-message 
+      *ngFor="let message of messages" 
+      [message]="message">
+    </app-message>
+  </div>
 
-  <app-input-box (sendMessage)="onSendMessage($event)"></app-input-box>
+  <app-input-box
+    (sendMessage)="onSendMessage($any($event))"
+    (voiceMessage)="onVoiceMessage($any($event))"
+    (fileMessage)="onFileMessage($any($event))">
+  </app-input-box>
+
 </div>
