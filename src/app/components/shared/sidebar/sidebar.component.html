@@ -1,44 +1,54 @@
-<div class="flex flex-col h-screen bg-sidebar-bg w-64 text-black border-r border-r-gray-300">
-
-    <div class="p-3 border-b border-gray-700">
-      <button 
-        (click)="newChat()"
-        class="w-full flex items-center gap-3 px-3 py-3 rounded-lg border border-gray-200 hover:bg-purple-200 transition-colors">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-        </svg>
-        <span class="text-sm font-medium">New chat</span>
-      </button>
-    </div>
+<div>
+  <div (click)="toggleSidebar()" class="flex flex-start">
+    <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M6 4C4.34315 4 3 5.34315 3 7V17C3 18.6569 4.34315 20 6 20H18C19.6569 20 21 18.6569 21 17V7C21 5.34315 19.6569 4 18 4H6ZM5 7C5 6.44772 5.44772 6 6 6H13V18H6C5.44772 18 5 17.5523 5 17V7ZM15 18H18C18.5523 18 19 17.5523 19 17V7C19 6.44772 18.5523 6 18 6H15V18Z" fill="gray"/>
+      </svg>
+  </div>
   
-
-    <div class="flex-1 overflow-y-auto py-2">
-      <div *ngFor="let conv of conversations" (click)="selectChat(conv.id)"[class.bg-purple-300]="conv.id === currentConversationId" class="group flex items-center gap-3 px-3 py-3 mx-2 rounded-lg cursor-pointer transition-colors relative">
-        
-        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-        </svg>
-        
-        <span class="text-sm truncate flex-1">{{ conv.title }}</span>
-        
+  
+  <div class="flex flex-col h-screen bg-sidebar-bg w-64 text-black border-r border-r-gray-300" [ngClass]="{ 'hidden': !showSidebar }">
+  
+      <div class="p-3 border-b border-gray-700">
         <button 
-          (click)="deleteChat(conv.id, $event)"
-          class="opacity-0 group-hover:opacity-100 p-1  rounded transition-opacity">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          (click)="newChat()"
+          class="w-full flex items-center gap-3 px-3 py-3 rounded-lg border border-gray-200 hover:bg-purple-200 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
           </svg>
+          <span class="text-sm font-medium">New chat</span>
         </button>
       </div>
-    </div>
+    
   
-
-    <div class="p-3 border-t border-gray-200">
-      <div class="flex items-center gap-3 px-3 py-2">
-        <div class="w-8 h-8 rounded-full bg-linear-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-          <span class="text-sm font-bold">N</span>
+      <div class="flex-1 overflow-y-auto py-2">
+        <div *ngFor="let conv of conversations" (click)="selectChat(conv.id)"[class.bg-purple-300]="conv.id === currentConversationId" class="group flex items-center gap-3 px-3 py-3 mx-2 rounded-lg cursor-pointer transition-colors relative">
+          
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+          </svg>
+          
+          <span class="text-sm truncate flex-1">{{ conv.title }}</span>
+          
+          <button 
+            (click)="deleteChat(conv.id, $event)"
+            class="opacity-0 group-hover:opacity-100 p-1  rounded transition-opacity">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
         </div>
-        <span class="text-sm">Niloofar Mousavi</span>
+      </div>
+    
+  
+      <div class="p-3 border-t border-gray-200">
+        <div class="flex items-center gap-3 px-3 py-2">
+          <div class="w-8 h-8 rounded-full bg-linear-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+            <span class="text-sm font-bold">N</span>
+          </div>
+          <span class="text-sm">Niloofar Mousavi</span>
+        </div>
       </div>
     </div>
-  </div>
+</div>
+
   

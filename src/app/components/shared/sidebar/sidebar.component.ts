@@ -15,6 +15,7 @@ import { Conversation } from '../../../core/models/message.model';
 export class SidebarComponent implements OnInit {
   conversations: Conversation[] = [];
   currentConversationId: string | null = null;
+  showSidebar:boolean=true;
 
   constructor(private aiService: AiService) {}
 
@@ -39,5 +40,8 @@ export class SidebarComponent implements OnInit {
   deleteChat(id: string, event: Event) {
     event.stopPropagation();
     this.aiService.deleteConversation(id);
+  }
+  toggleSidebar(){
+    this.showSidebar=!this.showSidebar
   }
 }

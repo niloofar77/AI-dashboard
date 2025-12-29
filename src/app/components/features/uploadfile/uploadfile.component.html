@@ -1,12 +1,15 @@
-<form [formGroup]="fileUploadedForm">
-  <input
-    #fileInput
-    type="file"
-    (change)="onFileChange($event)"
-    class="hidden"
-  />
 
+<div class="flex flex-row justify-end">
+  <form [formGroup]="fileUploadedForm">
+    <input
+      #fileInput
+      type="file"
+      (change)="onFileChange($event)"
+      class="hidden"
+    />
+  
+  
+  </form>
+  
+</div>
 
-</form>
-
-<!-- <app-filechip *ngIf="fileName" [fileName]="fileName"> </app-filechip> -->

@@ -84,14 +84,13 @@ export class AiService {
     
     return newConv;
   }
-
-  async sendMessage(content: string): Promise<void> {
+  async sendMessage(content: string, file?: File): Promise<void> {
     let conv = this.currentConversation.value;
-    
+  
     if (!conv) {
       conv = this.createNewConversation();
     }
-
+  
     const userMessage: Message = {
       id: this.generateId(),
       role: 'user',
@@ -102,9 +101,9 @@ export class AiService {
     conv.messages.push(userMessage);
     this.updateConversation(conv);
     this.isGenerating.next(true);
-
+  
     try {
-      const response = await this.callAvalAPI(conv.messages);
+      const response = await this.callAvalAPI(conv.messages, file); 
       
       const aiMessage: Message = {
         id: this.generateId(),
@@ -114,72 +113,87 @@ export class AiService {
       };
       
       conv.messages.push(aiMessage);
-      
-      if (conv.messages.length === 2) {
-        conv.title = this.generateTitle(content);
-      }
-      
       this.updateConversation(conv);
     } catch (error) {
       console.error('خطا در فراخوانی Aval API:', error);
-      
-     
       const errorMessage: Message = {
         id: this.generateId(),
         role: 'assistant',
         content: 'متأسفانه خطایی رخ داد. لطفاً دوباره تلاش کنید.',
         timestamp: new Date()
       };
-      
       conv.messages.push(errorMessage);
       this.updateConversation(conv);
     } finally {
       this.isGenerating.next(false);
     }
   }
+  
 
-  private async callAvalAPI(messages: Message[]): Promise<string> {
+
+  async callAvalAPI(messages: Message[], file?: File): Promise<string> {
     const avalMessages: AvalMessage[] = messages.map(m => ({
       role: m.role,
       content: m.content
     }));
-
+  
     const requestBody: AvalRequest = {
-      model: 'gpt-3.5-turbo-1106',
+      model: 'gpt-4o-mini',
       messages: avalMessages,
       temperature: 0.7,
       max_tokens: 2000,
       stream: false
     };
-
-    try {
-      const response = await fetch(`${this.API_URL}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.API_KEY}`
-        },
-        body: JSON.stringify(requestBody)
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error?.message || 'خطا در درخواست API');
-      }
-
-      const data: AvalResponse = await response.json();
+  
+    if (file) {
+      console.log("file",file)
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('messages', JSON.stringify(requestBody));
       
-      if (data.choices && data.choices.length > 0) {
+      try {
+        const response = await fetch(`${this.API_URL}/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${this.API_KEY}`
+          },
+          body: formData
+        });
+  
+        if (!response.ok) {
+          throw new Error('خطا در درخواست API');
+        }
+  
+        const data: AvalResponse = await response.json();
         return data.choices[0].message.content;
+      } catch (error) {
+        console.error('خطای Aval API:', error);
+        throw error;
       }
-      
-      throw new Error('پاسخی دریافت نشد');
-    } catch (error) {
-      console.error('خطای Aval API:', error);
-      throw error;
-    }
-  }
+    } else {
 
+      try {
+        const response = await fetch(`${this.API_URL}/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.API_KEY}`
+          },
+          body: JSON.stringify(requestBody)
+        });
+  
+        if (!response.ok) {
+          throw new Error('خطا در درخواست API');
+        }
+  
+        const data: AvalResponse = await response.json();
+        return data.choices[0].message.content;
+      } catch (error) {
+        console.error('خطای Aval API:', error);
+        throw error;
+      }}
+    }
+    
   async sendMessageStream(
     content: string, 
     onChunk: (chunk: string) => void

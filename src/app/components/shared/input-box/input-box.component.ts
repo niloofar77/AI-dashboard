@@ -1,94 +1,4 @@
-// import { Component, Output, EventEmitter, signal, viewChild, ViewChild, Signal } from '@angular/core';
-// import { CommonModule } from '@angular/common';
-// import { FormsModule } from '@angular/forms';
-// import { BehaviorSubject } from 'rxjs';
-// import { MenuCustomComponent } from '../../menu-custom/menu-custom.component';
-// import { UploadfileComponent } from '../../features/uploadfile/uploadfile.component';
-// import { FilechipComponent } from '../filechip/filechip.component';
-// import { VoiceRecorderService } from '../../../services/voice-recorder.service';
 
-// @Component({
-//   selector: 'app-input-box',
-//   standalone: true,
-//   imports: [CommonModule, FormsModule,MenuCustomComponent,UploadfileComponent,FilechipComponent],
-//   templateUrl: './input-box.component.html'
-// })
-// export class InputBoxComponent {
-//   @Output() sendMessage = new EventEmitter<string>();
-//   showSidebar=new BehaviorSubject<Boolean>(false);
-//   fileName: string = '';
-//   inputText = '';
-//   isLoading = false;
-//   showMenu=(false)
-//   attachedFile?: File;
-//   attachedFilePreviewUrl?: string | null;
-//   isRecording=false;
-
-//   constructor( private voiceService:VoiceRecorderService){
-
-//   }
-  
-
-//   @ViewChild('fileUploader') fileUploader!: UploadfileComponent;
-//   onEnter(event: KeyboardEvent) {
-//     if (event.shiftKey) return;
-//     event.preventDefault();
-//     this.send();
-//   }
-//   toggleSidebar() {
-//     this.showSidebar.next(!this.showSidebar)
-//   }
-//   handleshowMenu(){
-//       this.showMenu=!this.showMenu
-      
-//   }
-
-//   startRecording(){
-//     this.voiceService.startRecording()
-//   }
-//   stopRecording(){
-//     this.voiceService.stopRecording()
-
-//   }
-  
-//   onFileSelected(file: File) {
-//     this.attachedFile = file;
-//     this.fileName=file.name;
-//     // console.log(file.name,"jjjjjjjjjjjjjjj")
-//     this.showMenu = false;
-
-//     if (file.type.startsWith('image/')) {
-//       const url = URL.createObjectURL(file);
-//       this.attachedFilePreviewUrl = url;
-//     } else {
-//       this.attachedFilePreviewUrl = null;
-//     }
-//   }
- 
-//   removeAttachedFile() {
-//     if (this.attachedFilePreviewUrl) {
-//       URL.revokeObjectURL(this.attachedFilePreviewUrl);
-//     }
-//     this.attachedFile = undefined;
-//     this.attachedFilePreviewUrl = null;
-//   }
-
-//   async send() {
-//     if (!this.inputText.trim() || this.isLoading) return;
-    
-//     const message = this.inputText;
-//     this.inputText = '';
-//     this.isLoading = true;
-//     this.sendMessage.emit(message);
-
-    
-    
-//     setTimeout(() => {
-//       this.isLoading = false;
-//     }, 1000);
-//   }
-// }
-// chat-input.component.ts
 
 import { Component, OnDestroy, ViewChild, ElementRef, NgModule, Output, EventEmitter } from '@angular/core';
 import { VoiceRecorderService } from '../../../services/voice-recorder.service';
@@ -112,10 +22,9 @@ export class InputBoxComponent implements OnDestroy {
   showMenu: boolean = false;
   @Output() sendMessage = new EventEmitter<string>();
   @Output() voiceMessage = new EventEmitter<string>();
-  @Output() fileMessage = new EventEmitter<string>();
-  attachedFile: File | null = null;
+  @Output() fileMessage = new EventEmitter<File>();
+  attachedFiles: File[] =[];
   fileName: string = '';
-
   isRecording: boolean = false;
   recordingTime: number = 0;
   private timerInterval: any = null;
@@ -186,7 +95,6 @@ export class InputBoxComponent implements OnDestroy {
   saveVoiceFile(blob: Blob, duration: number): void {
     const timestamp = new Date();
     const fileName = `voice_${timestamp.getFullYear()}${(timestamp.getMonth()+1).toString().padStart(2,'0')}${timestamp.getDate().toString().padStart(2,'0')}_${timestamp.getHours().toString().padStart(2,'0')}${timestamp.getMinutes().toString().padStart(2,'0')}${timestamp.getSeconds().toString().padStart(2,'0')}.webm`;
-    
     const url = URL.createObjectURL(blob);
     
     this.savedVoiceFiles.push({
@@ -199,16 +107,17 @@ export class InputBoxComponent implements OnDestroy {
     console.log('فایل ذخیره شد:', fileName);
     console.log('حجم فایل:', (blob.size / 1024).toFixed(2), 'KB');
     console.log('تعداد کل فایل‌ها:', this.savedVoiceFiles.length);
+
+
   }
 
   cancelRecording(): void {
+
     this.voiceRecorder.cancelRecording();
     this.stopTimer();
     this.isRecording = false;
     console.log('ضبط لغو شد');
   }
-
- 
   downloadVoice(file: { name: string; blob: Blob; url: string }): void {
     const link = document.createElement('a');
     link.href = file.url;
@@ -225,7 +134,7 @@ export class InputBoxComponent implements OnDestroy {
       
 
       URL.revokeObjectURL(file.url);
-     this.savedVoiceFiles.splice(index, 1);
+      this.savedVoiceFiles.splice(index, 1);
       
       console.log('فایل حذف شد:', file.name);
     }
@@ -269,49 +178,48 @@ export class InputBoxComponent implements OnDestroy {
     this.showMenu = false;
   }
 
-
-  onFileSelected(file: File): void {
-    this.attachedFile = file;
-    this.fileName = file.name;
-    console.log('فایل انتخاب شد:', file.name);
+  onFileSelected(files: File[]): void {
+    if (files && files.length > 0) {
+      
+      const file = files[0];  
+      this.attachedFiles.push(file);   
+      this.fileName = file.name;
+      console.log('فایل انتخاب شد:', file.name);
+      this.showMenu=false;
+    }
   }
+  
 
 
-  removeAttachedFile(): void {
-    this.attachedFile = null;
-    this.fileName = '';
-    console.log('فایل ضمیمه حذف شد');
-  }
+
 
 
   send(): void {
-    if (!this.inputText.trim() && !this.attachedFile) {
+    if (!this.inputText.trim() && this.attachedFiles.length === 0) {
       return;
     }
-
     this.isLoading = true;
-
-
     console.log('در حال ارسال پیام...');
     console.log('متن:', this.inputText);
     
-    if (this.attachedFile) {
-      console.log('فایل ضمیمه:', this.attachedFile.name);
-      this.fileMessage.emit(this.attachedFile.name);
-
+    if (this.attachedFiles.length > 0) {
+      this.attachedFiles.forEach(file => {
+        console.log('فایل ضمیمه:', file.name);
+        this.fileMessage.emit(file);     
+      });
     }
-    const message=this.inputText;
-
+  
+    const message = this.inputText;
     this.sendMessage.emit(message);
   
-
     setTimeout(() => {
       this.isLoading = false;
       this.inputText = '';
-      this.removeAttachedFile();
+      this.attachedFiles = [];
       console.log('پیام ارسال شد');
     }, 1000);
   }
+  
 
   onEnter(event: KeyboardEvent): void {
     if (!event.shiftKey) {
@@ -320,11 +228,18 @@ export class InputBoxComponent implements OnDestroy {
     }
     
   }
-
+  removeAttachedFile(fileToRemove: File): void {
+    const index = this.attachedFiles.indexOf(fileToRemove);
+    if (index > -1) {
+      this.attachedFiles.splice(index, 1);   
+      console.log('فایل حذف شد:', fileToRemove.name);
+    }
+  }
+  
 
   
   canSend(): boolean {
-    return (this.inputText.trim().length > 0 || this.attachedFile !== null) && !this.isLoading;
+    return (this.inputText.trim().length > 0 || this.attachedFiles !== null) && !this.isLoading;
   }
 
   getFileSize(bytes: number): string {
@@ -343,4 +258,6 @@ export class InputBoxComponent implements OnDestroy {
     const duration = this.formatTime(file.duration);
     return `${duration} - ${size}`;
   }
+
+
 }

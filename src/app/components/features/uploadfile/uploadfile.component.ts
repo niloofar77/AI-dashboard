@@ -12,13 +12,13 @@ import { CommonModule } from '@angular/common';
 })
 export class UploadfileComponent {
   showFile:boolean=false
-  fileName: string = '';
-  @Output() fileSelected = new EventEmitter<File>();
+  fileNames: string[] = [];
+  @Output() fileSelected = new EventEmitter<File[]>();
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   fileUploadedForm = new FormGroup({
-    fileUploaded: new FormControl<File | null>(null),
+    fileUploaded: new FormControl<File[] | null>(null),
   });
 
   openDialog() {
@@ -28,16 +28,21 @@ export class UploadfileComponent {
 
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+    const files = input.files
   
-    if (file) {
-      this.showFile = !this.showFile;
-      this.fileName = file.name;
+    if (files) {
+    
+      const fileArray = Array.from(files); 
+      this.fileNames.push(...fileArray.map(file => file.name));
+      this.fileUploadedForm.patchValue({ fileUploaded: fileArray });
   
-      this.fileUploadedForm.patchValue({ fileUploaded: file });
-  
-      this.fileSelected.emit(file);
+      this.fileSelected.emit(fileArray);
     }
     }
+    closeFile(index: number) {
+      this.fileNames.splice(index, 1); 
+    }
+
+    
     }
   
