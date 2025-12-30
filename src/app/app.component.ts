@@ -5,7 +5,7 @@ import { ChatComponent } from './components/features/chat/chat.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,SidebarComponent,ChatComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
