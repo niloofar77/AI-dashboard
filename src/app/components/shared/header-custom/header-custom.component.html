@@ -1,5 +1,17 @@
-<header class="flex  flex-row gap-1 justify-end mr-3 mt-3">
-    <div class="border-2 border-gray-300  rounded-full p-1">
-        <img src="icons/user.svg" class="w-4 h-4"/>
+<header class="flex flex-row gap-3 justify-between items-center mr-3 mt-3">
+    <div (click)="toggleSidebar()" class="flex cursor-pointer ml-65 ">
+        <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 4C4.34315 4 3 5.34315 3 7V17C3 18.6569 4.34315 20 6 20H18C19.6569 20 21 18.6569 21 17V7C21 5.34315 19.6569 4 18 4H6ZM5 7C5 6.44772 5.44772 6 6 6H13V18H6C5.44772 18 5 17.5523 5 17V7ZM15 18H18C18.5523 18 19 17.5523 19 17V7C19 6.44772 18.5523 6 18 6H15V18Z" fill="gray"/>
+        </svg>
+    </div>
+    
+
+    <div class="border-2 border-gray-300 rounded-full p-1 cursor-pointer ml-auto  ">
+        <img src="icons/user.svg" class="w-4 h-4" (click)="toggleMenu()"/>
+    </div>
+    <div class="flex flex-row relative">
+        <div *ngIf="showMenu" class="absolute top-full mt-2 right-0 z-10">
+            <app-profile-menu></app-profile-menu>
+        </div>
     </div>
 </header>

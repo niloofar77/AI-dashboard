@@ -10,5 +10,9 @@ import { HeaderCustomComponent } from '../shared/header-custom/header-custom.com
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+  showSidebar = true;
 
+  toggleSidebar(event: boolean) {
+    this.showSidebar = !this.showSidebar;
+  }
 }

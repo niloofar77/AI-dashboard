@@ -1,9 +1,9 @@
 
 <div>
-  <app-header-custom></app-header-custom>
+  <app-header-custom (showSidebar)="toggleSidebar($event)"></app-header-custom>
 </div>
-<div class="flex h-screen">
-    <app-sidebar></app-sidebar>
+<div class="flex h-screen ">
+    <app-sidebar  [showSidebar]="showSidebar" ></app-sidebar>
     <app-chat class="flex-1"></app-chat>
 </div>
 

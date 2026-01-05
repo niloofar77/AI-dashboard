@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 
@@ -10,12 +10,12 @@ import { Conversation } from '../../../core/models/message.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  
 })
 export class SidebarComponent implements OnInit {
   conversations: Conversation[] = [];
   currentConversationId: string | null = null;
-  showSidebar:boolean=true;
+  @Input() showSidebar : boolean = true;
 
   constructor(private aiService: AiService) {}
 
@@ -41,7 +41,5 @@ export class SidebarComponent implements OnInit {
     event.stopPropagation();
     this.aiService.deleteConversation(id);
   }
-  toggleSidebar(){
-    this.showSidebar=!this.showSidebar
-  }
+
 }
