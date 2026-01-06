@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FilechipComponent } from "../../shared/filechip/filechip.component";
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-uploadfile',
   standalone: true,
-  imports: [ReactiveFormsModule, FilechipComponent,CommonModule],
+  imports: [ReactiveFormsModule,CommonModule],
   templateUrl: './uploadfile.component.html',
   styleUrl: './uploadfile.component.css'
 })

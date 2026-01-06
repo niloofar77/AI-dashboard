@@ -10,7 +10,6 @@
     }
   }
   
-  // Smooth animations for action buttons
   button {
     transition: all 0.2s ease;
     
@@ -23,7 +22,6 @@
     }
   }
   
-  // Copy feedback animation
   @keyframes checkmark {
     0% {
       transform: scale(0);

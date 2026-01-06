@@ -14,15 +14,28 @@
         <div class="w-full max-w-md p-8 space-y-6 border border-gray-300 rounded-xl shadow-md">
 
         <div class="flex justify-start items-center gap-2">
-        <span class="text-purple-700 font-semibold text-lg">login</span>
+          <span class="text-purple-700 font-semibold text-lg">login</span>
         </div>
         <p class="text-gray-500 text-sm">   Please enter your email    </p>
+        <form [formGroup]="loginForm" class="flex  gap-2 flex-col">
+          <div>
+            <input type="text" placeholder="username" class="w-full p-3 pl-10 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"  formControlName="username" />        
+          </div>
 
-        <input type="text" placeholder=" email " class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 "
-        />
-        <button class="w-full bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-md text-center">
-            Login
-        </button>
+          <div class="relative">
+            <input [type]=" showPassword? 'password' :'text'" placeholder="password" class="w-full p-3 pl-10 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"   formControlName="password" />
+            <img [src]=" showPassword? 'icons/eye.svg' :'icons/eye-off.svg'" class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2" (click)="togglePassword()"/>
+          </div>
+          
+        
+          <button class="w-full bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-md text-center"(click)="handleLogin()">
+              Login
+          </button>
+        </form>
+
+      
+
+      
         <button class="w-full border border-gray-300 p-3 rounded-md flex items-center justify-center gap-2 hover:bg-gray-100">
             <img src="icons/google.svg" class="w-5 h-5" />
           <span> Login with google  </span>

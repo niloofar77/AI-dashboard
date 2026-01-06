@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Message, Conversation } from '../models/message.model';
-import { environment } from '../../../../environments/enviroment';
+import { environment } from '../../../environments/enviroment';
 
 interface AvalMessage {
   role: 'user' | 'assistant' | 'system';

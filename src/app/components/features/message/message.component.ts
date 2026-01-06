@@ -1,23 +1,25 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Message } from '../../../core/models/message.model';
+import { AlertCustomComponent } from "../../shared/alert-custom/alert-custom.component";
 
 @Component({
   selector: 'app-message',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AlertCustomComponent],
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
 })
 export class MessageComponent {
   @Input() message!: Message;
   @Input() isLatest: boolean = false;
-  
   @Output() regenerate = new EventEmitter<string>();
   @Output() edit = new EventEmitter<{ id: string; content: string }>();
   
   showActions = false;
   copied = false;
+  showAlert:boolean=false
+  messageInput="message copied successfully!"
 
   get isUser(): boolean {
     return this.message.role === 'user';
@@ -64,4 +66,25 @@ export class MessageComponent {
       });
     }
   }
+  
+  copyMessage(messageContent: string) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(messageContent).then(() => {
+        console.log("Message copied to clipboard!");
+        this.showAlert=true;
+      }).catch((error) => {
+        console.error("Failed to copy message: ", error);
+      });
+    } else {
+      console.log("Clipboard API not supported. Falling back to execCommand.");
+      const textArea = document.createElement('textarea');
+      textArea.value = messageContent;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+    }
+  }
+  
+  
 }
